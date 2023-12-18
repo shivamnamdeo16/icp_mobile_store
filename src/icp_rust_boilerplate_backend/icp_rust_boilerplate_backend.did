@@ -1,3 +1,45 @@
+type Error = variant {
+  NotFound : record { msg : text };
+  InsufficientStock : record { msg : text };
+};
+type MobileDevice = record {
+  id : nat64;
+  ram : text;
+  rom : text;
+  model : text;
+  specifications : text;
+  updated_at : opt nat64;
+  battery_power : text;
+  created_at : nat64;
+  camera_quality : text;
+  quantity : int32;
+  brand : text;
+  price : float64;
+};
+type MobileDevicePayload = record {
+  ram : text;
+  rom : text;
+  model : text;
+  specifications : text;
+  battery_power : text;
+  camera_quality : text;
+  quantity : int32;
+  brand : text;
+  price : float64;
+};
+type Result = variant { Ok : MobileDevice; Err : Error };
 service : {
-    "greet": (text) -> (text) query;
+  add_mobile_device : (MobileDevicePayload) -> (opt MobileDevice);
+  delete_mobile_device : (nat64) -> (Result);
+  get_all_mobile_devices : () -> (vec MobileDevice) query;
+  get_mobile_device : (nat64) -> (Result) query;
+  get_mobile_devices_by_brand : (text) -> (vec MobileDevice) query;
+  get_mobile_devices_by_camera_quality : (text) -> (vec MobileDevice) query;
+  search_mobile_devices_by_battery_power : (text) -> (vec MobileDevice) query;
+  search_mobile_devices_by_price_range : (float64, float64) -> (
+      vec MobileDevice,
+    ) query;
+  search_mobile_devices_by_quantity : (int32) -> (vec MobileDevice) query;
+  search_mobile_devices_by_ram_size : (text) -> (vec MobileDevice) query;
+  update_mobile_device : (nat64, MobileDevicePayload) -> (Result);
 }
